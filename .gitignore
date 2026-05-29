@@ -137,3 +137,4 @@ dist
 StreamlabAuth/bun.lock
 Gateway/bun.lock
 Gateway/config.json
+Gateway/.token
