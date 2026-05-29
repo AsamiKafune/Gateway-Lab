@@ -1,0 +1,8 @@
+{
+    "platform": {
+        "ganknow": {
+            "endpoint": "wss://api.ganknow.com/v1/ws/users/media-share?page=alert-and-tts&source=streaming&user_id=",
+            "overlayURL":""
+        }
+    }
+}
