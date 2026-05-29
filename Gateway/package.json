@@ -5,5 +5,15 @@
     "encodeurl": "^2.0.0",
     "fastify": "^5.8.5",
     "ws": "^8.21.0"
-  }
+  },
+  "name": "gateway-lab",
+  "version": "0.1b",
+  "description": "gateway for streamers to receive donation data from multiple platforms and send to streamlabs",
+  "main": "index.js",
+  "pkg": {
+    "outputPath": "dist"
+  },
+  "bin": "index.js",
+  "author": "",
+  "license": "ISC"
 }
