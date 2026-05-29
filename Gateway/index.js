@@ -23,6 +23,9 @@ fastify.get("/get", async (request, reply) => {
 const start = async () => {
     try {
         await fastify.listen({ port: 6660, host: "0.0.0.0" }).then(async () => {
+
+            console.log("------------ [ Console ] ------------\n\nGateway-Lab 0.1b\nBy Kafune Ch | https://kfn.moe\nThank you for support my products.\n\n-------------- [ Log ] --------------")
+
             console.log("[Logs] server has start on http://localhost:6660")
             accessToken = fs.existsSync(path.join(process.cwd() + "/.token")) ? fs.readFileSync(path.join(process.cwd() + "/.token"), "utf-8") : null
             if (!accessToken) {
