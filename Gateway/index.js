@@ -57,6 +57,8 @@ async function loginStreamlab(token) {
 
         return;
     } else {
+
+        accessToken = token
         console.log("[Logs] Access token has been found, you can start receive donation data on Gateway.")
         console.log(`Welcome back, ${_res?.streamlabs?.username}!\n`)
         connectWebSocket()
@@ -81,6 +83,7 @@ function connectWebSocket() {
                     let amount = parseInt(parseFloat(_donateData?.donationAmount).toFixed(0))
                     let donorName = _donateData?.donorName
                     let donorMessage = _donateData?.donorMessage
+                    sendDonate(donorName, amount, donorMessage, accessToken)
                 }
             }
         })
@@ -92,5 +95,31 @@ function connectWebSocket() {
         setTimeout(() => {
             console.log("[WARN] Gank doesn't Activate.")
         }, 120)
+    }
+}
+
+async function sendDonate(name, amount, msg, token) {
+    // steamlab v2
+    const { isError, data } = await fetch('https://streamlabs.com/api/v2.0/donations', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + token
+        },
+        body: JSON.stringify({
+            "name": name,
+            "message": msg,
+            "identifier": name,
+            "amount": parseInt(amount),
+            "currency": "THB"
+        })
+    }).then(async (res) => ({ isError: !res.ok, data: await res.json() }))
+        .catch(() => ({ isError: true, data: null }));
+    if (!data?.error) {
+        console.log("[Logs] Donate has been sent to Streamlabs.")
+    }
+    else {
+        console.log("[ERROR] Failed to send donate data to Streamlabs, please check your access token.")
+        console.log(data)
     }
 }
