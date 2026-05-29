@@ -136,3 +136,4 @@ dist
 .pnp.*
 StreamlabAuth/bun.lock
 Gateway/bun.lock
+Gateway/config.json
