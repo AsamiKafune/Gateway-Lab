@@ -1,6 +1,9 @@
 # Gateway-Lab
 Gateway สำหรับรับข้อมูลโดเนตจากหลายแพลตฟอร์มแล้วส่งต่อเข้า Streamlabs
 
+# Repo นี้ทำเพื่อการศึกษาเท่านั้น!
+- ไม่รับประกันหากใช้แล้วเกิดปัญหาเช่นใช้งานไม่ได้หรือ platform ต่างๆมีการ patch แก้ไข
+
 # ♦️ ผู้ใช้ทั่วไป
 - โหลดไฟล์จาก [คลิ๊กที่นี่](https://github.com/AsamiKafune/Gateway-Lab/releases)
 - แตกไฟล์และแก้ไข config.json โดยแก้ overlayURL ของแพลตฟอร์มต่างๆเช่น ganknow เอาลิ้งก์จาก [คลิ๊กที่นี่](https://ganknow.com/manage/stream-settings?tab=alert)
