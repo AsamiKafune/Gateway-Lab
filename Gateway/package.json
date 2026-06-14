@@ -7,7 +7,7 @@
     "ws": "^8.21.0"
   },
   "name": "gateway-lab",
-  "version": "0.1b",
+  "version": "0.2b",
   "description": "gateway for streamers to receive donation data from multiple platforms and send to streamlabs",
   "main": "index.js",
   "pkg": {
