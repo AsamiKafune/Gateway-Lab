@@ -31,6 +31,7 @@ const start = async () => {
             if (!accessToken) {
                 console.log("\nconnecting to Streamlabs, please open this link on your browser and login to your Streamlabs account to connect with Gateway.\n")
                 console.log("https://streamlabs.com/api/v2.0/authorize?client_id=2f076e56-f11e-446a-8d32-1806307d804d&redirect_uri=http://localhost:6661/api/v1/account/redirect&scope=donations.read+donations.create&response_type=code&state=123456")
+                
             } else {
                 await loginStreamlab(accessToken)
             }
@@ -83,10 +84,11 @@ function connectWebSocket() {
             if (data?.notificationType == "QUEUE") {
                 if (data?.eventType == "ALERT_AND_TTS") {
                     let _donateData = data?.data?.mediaQueue;
-                    let amount = parseInt(parseFloat(_donateData?.donationAmount).toFixed(0))
+                    let amount = parseInt(parseFloat(_donateData?.donationAmountLocalCurrency).toFixed(0))
+                    let currency = _donateData?.donationLocalCurrency || "THB";
                     let donorName = _donateData?.donorName
                     let donorMessage = _donateData?.donorMessage
-                    sendDonate(donorName, amount, donorMessage, accessToken)
+                    sendDonate(donorName, amount, donorMessage, accessToken, currency)
                 }
             }
         })
@@ -101,7 +103,7 @@ function connectWebSocket() {
     }
 }
 
-async function sendDonate(name, amount, msg, token) {
+async function sendDonate(name, amount, msg, token, currency) {
     // steamlab v2
     const { isError, data } = await fetch('https://streamlabs.com/api/v2.0/donations', {
         method: "POST",
@@ -114,7 +116,7 @@ async function sendDonate(name, amount, msg, token) {
             "message": msg,
             "identifier": name,
             "amount": parseInt(amount),
-            "currency": "THB"
+            "currency": currency
         })
     }).then(async (res) => ({ isError: !res.ok, data: await res.json() }))
         .catch(() => ({ isError: true, data: null }));
