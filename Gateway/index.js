@@ -70,15 +70,22 @@ async function loginStreamlab(token) {
     }
 }
 
+let gankController = null;
+let reconnectTimer = null;
+
 function connectWebSocket() {
 
     //ganknow
-    if (getData().platform.ganknow.overlayURL.length > 0) {
-        let gankController = new WebSocket(getData().platform.ganknow.endpoint + getData().platform.ganknow.overlayURL.replace("https://stream.ganknow.com/", ""))
-        gankController.on("open", event => {
+    const ganknow = getData().platform.ganknow;
+    if (ganknow.overlayURL.length > 0) {
+        if (gankController || reconnectTimer) return;
+
+        const socket = new WebSocket(ganknow.endpoint + ganknow.overlayURL.replace("https://stream.ganknow.com/", ""));
+        gankController = socket;
+        socket.on("open", event => {
             console.log('gankController websocket has been connected!');
         })
-        gankController.on("message", msg => {
+        socket.on("message", msg => {
             let data = JSON.parse(msg.toString())
             console.log(`[GANK] data`, data)
             if (data?.notificationType == "QUEUE") {
@@ -92,9 +99,18 @@ function connectWebSocket() {
                 }
             }
         })
-        gankController.on("error", (e) => {
+        socket.on("close", () => {
+            if (gankController !== socket) return;
+            gankController = null;
+            console.log("[WARN] Gank websocket disconnected. Reconnecting in 5 seconds.");
+            reconnectTimer = setTimeout(() => {
+                reconnectTimer = null;
+                connectWebSocket();
+            }, 5000);
+        })
+        socket.on("error", (e) => {
             console.log(e)
-            console.log("[ERROR] Gank has been self destroy please restart program to reconnect.")
+            socket.terminate();
         })
     } else {
         setTimeout(() => {
