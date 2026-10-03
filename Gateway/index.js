@@ -20,18 +20,22 @@ fastify.get("/get", async (request, reply) => {
     return reply.send("Access token has been received, you can close this page and start receive donation data on Gateway.")
 })
 
+
+function showlogin() {
+    console.log("\nconnecting to Streamlabs, please open this link on your browser and login to your Streamlabs account to connect with Gateway.\n")
+    console.log("https://streamlabs.com/api/v2.0/authorize?client_id=2f076e56-f11e-446a-8d32-1806307d804d&redirect_uri=http://localhost:6661/api/v1/account/redirect&scope=donations.read+donations.create&response_type=code&state=123456")            
+}
+
 const start = async () => {
     try {
         await fastify.listen({ port: 6660, host: "0.0.0.0" }).then(async () => {
 
-            console.log("------------ [ Console ] ------------\n\nGateway-Lab 0.1b\nBy Kafune Ch | https://kfn.moe\nThank you for support my products.\n\n-------------- [ Log ] --------------")
+            console.log("------------ [ Console ] ------------\n\nGateway-Lab 0.3b\nBy Kafune Ch | https://kfn.moe\nThank you for support my products.\n\n-------------- [ Log ] --------------")
 
             console.log("[Logs] server has start on http://localhost:6660")
             accessToken = fs.existsSync(path.join(process.cwd() + "/.token")) ? fs.readFileSync(path.join(process.cwd() + "/.token"), "utf-8") : null
             if (!accessToken) {
-                console.log("\nconnecting to Streamlabs, please open this link on your browser and login to your Streamlabs account to connect with Gateway.\n")
-                console.log("https://streamlabs.com/api/v2.0/authorize?client_id=2f076e56-f11e-446a-8d32-1806307d804d&redirect_uri=http://localhost:6661/api/v1/account/redirect&scope=donations.read+donations.create&response_type=code&state=123456")
-                
+                showlogin()
             } else {
                 await loginStreamlab(accessToken)
             }
@@ -55,10 +59,7 @@ async function loginStreamlab(token) {
         .catch(() => ({ isError: true, res: null }));
 
     if (!_res?.streamlabs?.username) {
-
-        console.log("\nconnecting to Streamlabs, please open this link on your browser and login to your Streamlabs account to connect with Gateway.\n")
-        console.log("https://streamlabs.com/api/v2.0/authorize?client_id=2f076e56-f11e-446a-8d32-1806307d804d&redirect_uri=http://localhost:6661/api/v1/account/redirect&scope=donations.read+donations.create&response_type=code&state=123456")
-
+        showlogin()
         return;
     } else {
 
